@@ -110,7 +110,7 @@ class ReflectionTreeAgent:
         """
         poles = self.state['signals'].get(axis, {})
         if not poles:
-            return 'balanced', 'There's nuance in how you showed up.'
+            return 'balanced', "There's nuance in how you showed up."
 
         max_pole = max(poles, key=poles.get)
         count = poles.get(max_pole, 0)
