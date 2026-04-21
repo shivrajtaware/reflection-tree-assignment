@@ -1,4 +1,4 @@
-# Daily Reflection Tree - DT Fellowship Assignment
+# Daily Reflection Tree - DT Assignment
 
 A deterministic reflection agent that guides employees through structured end-of-day reflection across three psychological axes: **Locus of Control**, **Orientation (Contribution vs Entitlement)**, and **Radius of Concern (Self-Centric vs Altrocentric)**.
 
