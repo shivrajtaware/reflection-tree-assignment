@@ -1,0 +1,386 @@
+{
+  "metadata": {
+    "title": "Daily Reflection Tree - DT Fellowship Assignment",
+    "version": "1.0",
+    "description": "A deterministic reflection agent for end-of-day employee reflection across three psychological axes: Locus of Control, Orientation, and Radius of Concern",
+    "axioms": [
+      "Axis 1: Locus (Victim ↔ Victor) - Internal vs External Locus of Control",
+      "Axis 2: Orientation (Entitlement ↔ Contribution) - What they gave vs what they expected",
+      "Axis 3: Radius (Self-Centric ↔ Altrocentric) - Whose needs they're thinking about"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "START",
+      "parentId": null,
+      "type": "start",
+      "text": "Good evening. Let's take 5 minutes to look at your day — not everything, just what mattered.\n\nWe'll walk through three short reflections. No right answers. Just honesty.",
+      "options": [],
+      "target": null,
+      "signal": null,
+      "notes": "Opening. Auto-advances to first question."
+    },
+    {
+      "id": "A1_INTRO",
+      "parentId": "START",
+      "type": "bridge",
+      "text": "First, let's zoom out. How would you describe today — the overall shape of it?",
+      "options": [],
+      "target": "A1_OPEN",
+      "signal": null,
+      "notes": "Transition into Axis 1."
+    },
+    {
+      "id": "A1_OPEN",
+      "parentId": "A1_INTRO",
+      "type": "question",
+      "text": "If you had to pick one word for today, which fits best?",
+      "options": [
+        "Productive — I moved things forward",
+        "Mixed — wins and setbacks",
+        "Tough — harder than I wanted",
+        "Draining — it took everything I had"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "First question. Branches based on whether they describe day positively (Productive/Mixed) or negatively (Tough/Draining). This sets up the frame for agency questions."
+    },
+    {
+      "id": "A1_DECISION",
+      "parentId": "A1_OPEN",
+      "type": "decision",
+      "text": null,
+      "options": "answer=Productive|Mixed:A1_Q_AGENCY_HIGH;answer=Tough|Draining:A1_Q_AGENCY_LOW",
+      "target": null,
+      "signal": null,
+      "notes": "Router. If positive frame → ask what made good things happen (agency reinforcement). If negative frame → ask how they responded (agency discovery)."
+    },
+    {
+      "id": "A1_Q_AGENCY_HIGH",
+      "parentId": "A1_DECISION",
+      "type": "question",
+      "text": "You said your day felt {A1_OPEN.answer}. When something went well or moved forward, what was your role in that?",
+      "options": [
+        "I prepared well — did the work beforehand",
+        "I adapted on the fly when plans changed",
+        "I took initiative without being asked",
+        "I got help from someone, and I let them in"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "For positive-frame responders. Probes whether they see their own agency. Options A, B, C indicate internal locus; D is more collaborative/relational."
+    },
+    {
+      "id": "A1_Q_AGENCY_LOW",
+      "parentId": "A1_DECISION",
+      "type": "question",
+      "text": "You said your day felt {A1_OPEN.answer}. When something went wrong or felt hard, what was your first instinct?",
+      "options": [
+        "I figured out what I could actually control and focused there",
+        "I felt stuck — circumstances were against me",
+        "I pushed harder, thinking if I just worked harder it'd change",
+        "I looked for who could help or tell me what to do"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "For negative-frame responders. Probes agency under stress. A indicates internal locus; B, C, D indicate external or avoidance."
+    },
+    {
+      "id": "A1_DECISION_2",
+      "parentId": "A1_Q_AGENCY_HIGH",
+      "type": "decision",
+      "text": null,
+      "options": "answer=I prepared well — did the work beforehand|I adapted on the fly when plans changed|I took initiative without being asked:A1_REFLECT_INTERNAL;answer=I got help from someone, and I let them in:A1_REFLECT_COLLABORATIVE",
+      "target": null,
+      "signal": null,
+      "notes": "Routes high-frame responders based on whether they cite solo agency or collaborative agency."
+    },
+    {
+      "id": "A1_DECISION_3",
+      "parentId": "A1_Q_AGENCY_LOW",
+      "type": "decision",
+      "text": null,
+      "options": "answer=I figured out what I could actually control and focused there:A1_REFLECT_INTERNAL;answer=I felt stuck — circumstances were against me|I pushed harder, thinking if I just worked harder it'd change|I looked for who could help or tell me what to do:A1_REFLECT_EXTERNAL",
+      "target": null,
+      "signal": null,
+      "notes": "Routes low-frame responders based on whether they found agency or felt stuck."
+    },
+    {
+      "id": "A1_REFLECT_INTERNAL",
+      "parentId": "A1_DECISION_2|A1_DECISION_3",
+      "type": "reflection",
+      "text": "Notice this: when you look back at today, you see your hand in what happened. That's agency. Not \"everything went my way\" — but \"I stayed in the driver's seat of what I could influence.\" That's the internal locus at work.",
+      "options": [],
+      "target": null,
+      "signal": "axis1:internal",
+      "notes": "Reflection for internal locus responses. Gentle affirmation of agency."
+    },
+    {
+      "id": "A1_REFLECT_EXTERNAL",
+      "parentId": "A1_DECISION_3",
+      "type": "reflection",
+      "text": "A tough day pulls your attention outward — to circumstances, to what others did or didn't do. That's real. The question isn't whether the obstacles were real. They were. But somewhere in today, you made a call — even if it was small. Even if it was just deciding how to feel about something you couldn't control. That was a choice.",
+      "options": [],
+      "target": null,
+      "signal": "axis1:external",
+      "notes": "Reflection for external locus responses. Validates difficulty while point to agency."
+    },
+    {
+      "id": "A1_REFLECT_COLLABORATIVE",
+      "parentId": "A1_DECISION_2",
+      "type": "reflection",
+      "text": "There's real strength in knowing when to ask for help and in being willing to let someone in. That's not the opposite of agency — it's a mature form of it. You saw what you needed and you made the call to ask. That's still you driving.",
+      "options": [],
+      "target": null,
+      "signal": "axis1:internal",
+      "notes": "Reflection for collaborative/help-seeking responses."
+    },
+    {
+      "id": "BRIDGE_1_2",
+      "parentId": "A1_REFLECT_INTERNAL|A1_REFLECT_EXTERNAL|A1_REFLECT_COLLABORATIVE",
+      "type": "bridge",
+      "text": "Good. You see how you showed up. Now let's shift to what you showed up *for* — what you gave versus what you needed.",
+      "options": [],
+      "target": "A2_OPEN",
+      "signal": null,
+      "notes": "Transition from Axis 1 to Axis 2. Builds on agency insight to move toward contribution."
+    },
+    {
+      "id": "A2_OPEN",
+      "parentId": "BRIDGE_1_2",
+      "type": "question",
+      "text": "Think about one meaningful interaction you had today — a conversation, a moment of work together. Which of these fits?",
+      "options": [
+        "I helped someone with something that wasn't my formal job",
+        "I taught or shared something that moved someone forward",
+        "I needed support or asked for help",
+        "I felt like I wasn't getting recognized for what I was doing"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Gate question for Axis 2. A and B → contribution orientation. C → neutral. D → entitlement orientation."
+    },
+    {
+      "id": "A2_DECISION",
+      "parentId": "A2_OPEN",
+      "type": "decision",
+      "text": null,
+      "options": "answer=I helped someone with something that wasn't my formal job|I taught or shared something that moved someone forward:A2_Q_CONTRIBUTION;answer=I needed support or asked for help:A2_Q_MUTUAL;answer=I felt like I wasn't getting recognized for what I was doing:A2_Q_ENTITLEMENT",
+      "target": null,
+      "signal": null,
+      "notes": "Router based on whether they're focused on giving, asking, or expecting recognition."
+    },
+    {
+      "id": "A2_Q_CONTRIBUTION",
+      "parentId": "A2_DECISION",
+      "type": "question",
+      "text": "That moment when you helped or taught — what was your feeling afterward?",
+      "options": [
+        "Good. Simple. It mattered.",
+        "Tired, but it was worth it",
+        "I don't keep track of these moments; I just do them",
+        "I felt appreciated; they said thanks"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Follow-up for contribution responders. Probes whether contribution is intrinsic or reward-seeking."
+    },
+    {
+      "id": "A2_Q_MUTUAL",
+      "parentId": "A2_DECISION",
+      "type": "question",
+      "text": "When you asked for or got that support, what did you do?",
+      "options": [
+        "Used it to move forward, then got back to helping others",
+        "Felt relieved and grateful",
+        "Realized I had to ask more often than I wanted to",
+        "Felt like I should have been able to handle it alone"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Follow-up for asking/needing responders. Distinguishes comfort with mutual support vs shame."
+    },
+    {
+      "id": "A2_Q_ENTITLEMENT",
+      "parentId": "A2_DECISION",
+      "type": "question",
+      "text": "When you felt that lack of recognition, where did you focus?",
+      "options": [
+        "On what I could do better to earn it",
+        "On the specific person or people who didn't acknowledge me",
+        "On wondering if I'm in the right place",
+        "On reflecting that day — did I actually do my best?"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Follow-up for entitlement responders. A/D show some agency; B/C show externalization."
+    },
+    {
+      "id": "A2_DECISION_2",
+      "parentId": "A2_Q_CONTRIBUTION|A2_Q_MUTUAL|A2_Q_ENTITLEMENT",
+      "type": "decision",
+      "text": null,
+      "options": "answer=Good. Simple. It mattered.|I don't keep track of these moments; I just do them|Used it to move forward, then got back to helping others|Felt relieved and grateful|On what I could do better to earn it|On reflecting that day — did I actually do my best?:CONTRIBUTION_DOMINANT;answer=*:ENTITLEMENT_DOMINANT",
+      "target": null,
+      "signal": null,
+      "notes": "Aggregate router: answers suggesting intrinsic contribution vs reward-seeking."
+    },
+    {
+      "id": "CONTRIBUTION_DOMINANT",
+      "parentId": "A2_DECISION_2",
+      "type": "reflection",
+      "text": "Somewhere in today, you focused on what you could *give*. Maybe it was a small thing. But you thought about someone beyond yourself and stepped in. That's the heart of what organizations actually need — people who show up not just for the credential, but for the work itself. That showed up in you today.",
+      "options": [],
+      "target": null,
+      "signal": "axis2:contribution",
+      "notes": "Reflection for contribution-oriented path."
+    },
+    {
+      "id": "ENTITLEMENT_DOMINANT",
+      "parentId": "A2_DECISION_2",
+      "type": "reflection",
+      "text": "Fair warning: everyone feels overlooked sometimes. The muscle to develop is this — instead of asking \"Why don't they see me?\", ask \"What am I trying to prove?\" Often the answer is uncomfortable. But it's also where the freedom is.",
+      "options": [],
+      "target": null,
+      "signal": "axis2:entitlement",
+      "notes": "Reflection for entitlement-leaning path. Not shaming, but pointing to the edge of growth."
+    },
+    {
+      "id": "BRIDGE_2_3",
+      "parentId": "CONTRIBUTION_DOMINANT|ENTITLEMENT_DOMINANT",
+      "type": "bridge",
+      "text": "Last piece. When you think about today, who was in your frame? Just you? Your team? Beyond that?",
+      "options": [],
+      "target": "A3_OPEN",
+      "signal": null,
+      "notes": "Transition to Axis 3. Moves from what they gave to whose world they're thinking about."
+    },
+    {
+      "id": "A3_OPEN",
+      "parentId": "BRIDGE_2_3",
+      "type": "question",
+      "text": "When you think about today's biggest challenge or win, whose world comes to mind first?",
+      "options": [
+        "My own — my goals, my stress, my work",
+        "My team's — we were all in it or affected by it",
+        "A specific person who had it harder than me today",
+        "The customer or person our work serves"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Gate for Axis 3. A is self-centric; B is team; C/D are altrocentric (widening radius)."
+    },
+    {
+      "id": "A3_DECISION",
+      "parentId": "A3_OPEN",
+      "type": "decision",
+      "text": null,
+      "options": "answer=My own — my goals, my stress, my work:A3_Q_SELF;answer=My team's — we were all in it or affected by it|A specific person who had it harder than me today|The customer or person our work serves:A3_Q_OTHER",
+      "target": null,
+      "signal": null,
+      "notes": "Router: self-focused vs other-focused frame."
+    },
+    {
+      "id": "A3_Q_SELF",
+      "parentId": "A3_DECISION",
+      "type": "question",
+      "text": "When you're mostly focused on your own experience — your wins and hits — what does that do to how you feel?",
+      "options": [
+        "Keeps me sharp and accountable",
+        "Makes me anxious — there's always more to do",
+        "Gives me energy when things go well, crashes me when they don't",
+        "Makes me feel isolated sometimes — like I'm doing this alone"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Follow-up for self-focused responders. Probes cost of self-centrism."
+    },
+    {
+      "id": "A3_Q_OTHER",
+      "parentId": "A3_DECISION",
+      "type": "question",
+      "text": "When you think beyond yourself — about the team or the person being served — what shift happens?",
+      "options": [
+        "My problems feel smaller, more manageable",
+        "I find more energy — there's purpose beyond me",
+        "I see what actually matters versus what I was stressed about",
+        "It's harder — now I'm carrying everyone's challenges too"
+      ],
+      "target": null,
+      "signal": null,
+      "notes": "Follow-up for other-focused responders. Probes the benefit and cost of wider radius."
+    },
+    {
+      "id": "A3_DECISION_2",
+      "parentId": "A3_Q_SELF|A3_Q_OTHER",
+      "type": "decision",
+      "text": null,
+      "options": "parentId=A3_Q_SELF:A3_REFLECT_SELF;parentId=A3_Q_OTHER:A3_REFLECT_OTHER",
+      "target": null,
+      "signal": null,
+      "notes": "Routes to appropriate reflection based on Axis 3 path."
+    },
+    {
+      "id": "A3_REFLECT_SELF",
+      "parentId": "A3_DECISION_2",
+      "type": "reflection",
+      "text": "Self-awareness is good. So is ambition. But watch this: the people who say their work is meaningful are almost never the ones obsessing over their own performance. They're the ones who got absorbed in something bigger than themselves. That's not sacrifice. That's where the meaning is.",
+      "options": [],
+      "target": null,
+      "signal": "axis3:self_centric",
+      "notes": "Reflection for self-focused responders. Gentle invitation to transcendence."
+    },
+    {
+      "id": "A3_REFLECT_OTHER",
+      "parentId": "A3_DECISION_2",
+      "type": "reflection",
+      "text": "When you widen your frame from just you to the team, the customer, the person being served — something shifts. Your own problems get context. And paradoxically, you become more effective, not less. Because you're solving for what actually matters.",
+      "options": [],
+      "target": null,
+      "signal": "axis3:altrocentric",
+      "notes": "Reflection for other-focused responders. Affirms transcendence."
+    },
+    {
+      "id": "SUMMARY",
+      "parentId": "A3_REFLECT_SELF|A3_REFLECT_OTHER",
+      "type": "summary",
+      "text": "So here's what showed up in your day:\n\nYou leaned {axis1.dominant} on agency — {axis1.insight}\n\nOn what you gave and expected, you showed {axis2.dominant} — {axis2.insight}\n\nAnd when you stepped back to see the whole picture, your frame was mostly {axis3.dominant} — {axis3.insight}\n\nThat's not a judgment. It's just what you chose to notice today. Tomorrow you can choose again.\n\nSee you tomorrow.",
+      "options": [],
+      "target": null,
+      "signal": null,
+      "notes": "Final synthesis. Interpolates dominant poles and insights from all three axes."
+    },
+    {
+      "id": "END",
+      "parentId": "SUMMARY",
+      "type": "end",
+      "text": "Thank you for the honesty. Rest well.",
+      "options": [],
+      "target": null,
+      "signal": null,
+      "notes": "Closing."
+    }
+  ],
+  "signals": {
+    "axis1": {
+      "internal": "Internal locus of control — sees agency and choice",
+      "external": "External locus — tendency to externalize control"
+    },
+    "axis2": {
+      "contribution": "Contribution-oriented — focused on giving and impact",
+      "entitlement": "Entitlement-oriented — focused on what's owed"
+    },
+    "axis3": {
+      "self_centric": "Self-centric radius — focused on personal experience",
+      "altrocentric": "Altrocentric radius — focused on others and systems"
+    }
+  },
+  "interpolations": {
+    "axis1.dominant": "Will be replaced with 'internal' or 'external' based on signal counts",
+    "axis1.insight": "Will be replaced with insight text based on dominant pole",
+    "axis2.dominant": "Will be replaced with 'contribution' or 'entitlement' based on signal counts",
+    "axis2.insight": "Will be replaced with insight text based on dominant pole",
+    "axis3.dominant": "Will be replaced with 'self-centric' or 'altrocentric' based on signal counts",
+    "axis3.insight": "Will be replaced with insight text based on dominant pole"
+  }
+}
